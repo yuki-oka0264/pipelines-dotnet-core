@@ -15,7 +15,7 @@ parameters:
   default: develop
   values:
     - develop
-    - dev01
+    - dev02
 
 stages:
   - stage: BuildWebGLBase_Stage
