@@ -4,14 +4,30 @@ pr: none
 pool:
   name: Default
 
+variables:
+- group: "Otogi Versions"
+
+parameters:
+- name: TargetEnvironment
+  displayName: Environment
+  type: string
+  default: develop
+  values:
+    - develop
+    - dev01
+
 stages:
   - stage: BuildWebGLBase_Stage
     displayName: Build WebGL
     dependsOn: []
+    variables:
+      versionCode: $[ variables['PV VersionCode/${{ parameters.TargetEnvironment }}'] ]
     jobs:
     - job: Test
       displayName: Test
       steps:
-      - powershell: |
-          Write-Output Neko
-        displayName: Test PS
+      - task: PowerShell@2
+        displayName: Build Assets
+        inputs:
+          filePath: src\BuildAssets.ps1
+          arguments: -Platform WebGLPlayer -ProjectFolder $(projectFolder)
