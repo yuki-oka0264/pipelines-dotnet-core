@@ -22,6 +22,7 @@ stages:
     displayName: Build WebGL
     dependsOn: []
     variables:
+      displayVersion: $[ variables['PV DisplayVersion/${{ parameters.TargetEnvironment }}'] ]
       versionCode: $[ variables['PV VersionCode/${{ parameters.TargetEnvironment }}'] ]
     jobs:
     - job: Test
