@@ -1,3 +1,9 @@
+trigger: none
+pr: none
+
+pool:
+  name: Default
+
 stages:
   - stage: BuildWebGLBase_Stage
     displayName: Build WebGL
