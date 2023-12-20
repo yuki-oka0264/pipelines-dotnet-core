@@ -5,6 +5,7 @@ pool:
   name: Default
 
 variables:
+- group: "Chatwork Notifications"
 - group: "Otogi Versions"
 
 parameters:
@@ -26,8 +27,12 @@ stages:
     - job: Test
       displayName: Test
       steps:
-      - task: PowerShell@2
-        displayName: Build Assets
-        inputs:
-          filePath: src\BuildAssets.ps1
-          arguments: -Platform WebGLPlayer -ProjectFolder $(projectFolder)
+      - powershell: |
+          $message = "${{ parameters.TargetEnvironment }}-WebGL v$(displayVersion) ($(versionCode)): ゲームビルド始まっちゃったよ～"
+          $message += "$(CN Takeba 100)"
+
+          $body = @{"body"= $message}
+          $url = "$(CN Main Channel Url)"
+          $headers = @{"X-ChatWorkToken" = "$(CN Token)"}
+          Invoke-WebRequest -Method Post -Uri $url -Body $body -ContentType "application/x-www-form-urlencoded" -Headers $headers -UseBasicParsing
+        displayName: Send WebGL build started notification
